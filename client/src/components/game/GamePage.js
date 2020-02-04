@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import World from "./World"
 
 function GamePage() {
   const [mapList, setMapList] = useState([]);
@@ -60,6 +61,8 @@ function GamePage() {
       <button onClick={() => handleMove("s")}>S</button>
       <button onClick={() => handleMove("w")}>W</button>
       <button onClick={() => handleMove("e")}>E</button>
+
+      <World/>
     </div>
   );
 }

@@ -1,9 +1,42 @@
 import React, { useState } from "react";
-import axios from 'axios'
+import axios from "axios";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+const RegisterContainer = styled.div`
+  margin: 10vh auto 30px auto;
+  width: 40%;
+  border: 5px solid black;
+  padding: 30px;
+`;
+const FormContainer = styled.form`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const Button = styled.div`
+  margin: 40px auto;
+
+  padding: 10px 20px;
+  border: 3px solid #202020;
+  font-size: 1.5rem;
+  cursor: pointer;
+  &:hover {
+    color: yellow;
+  }
+`;
+const Input = styled.input`
+  font-size: 1.5rem;
+  margin: 20px 10px;
+`;
+const Label = styled.label`
+  font-size: 1.5rem;
+  margin: 10px atuo 5px 10px;
+`;
 
 function Register() {
-    const[errorMessage,setErrorMessage]=useState('')
+  const [errorMessage, setErrorMessage] = useState("");
   const [form, setForm] = useState({
     username: "",
     password1: "",
@@ -21,57 +54,46 @@ function Register() {
         localStorage.setItem("token", res.data.key);
       })
       .catch(err => {
-        //   if (err.response.data.password1[0]) {
-        //       setErrorMessage(err.response.data.password1[0]);
-        //   } else if (err.response.data.password2[0]) {
-        //       setErrorMessage(err.response.data.password2[0]);
-        //     } else if (err.response.data.username[0]) {
-        //       setErrorMessage(err.response.data.username[0]);
-        //     } else if (err.response.data.non_field_errors[0]) {
-        //       setErrorMessage(err.response.data.non_field_errors[0]);
-        //     }
         console.log(err.response.data);
       });
-      setForm({ username: "", password1: "", password2: "" });
-      setErrorMessage("")
+    setForm({ username: "", password1: "", password2: "" });
+    setErrorMessage("");
   };
   return (
-    <div className="Register">
-      <form onSubmit={submitForm}>
-        <label>
-          username:
-          <input
+    <>
+      <RegisterContainer>
+        <FormContainer onSubmit={submitForm}>
+          <Label>username:</Label>
+          <Input
             type="text"
             name="username"
             value={form.username}
             onChange={changeHandler}
           />
-        </label>
-        <label>
-          password:
-          <input
+
+          <Label>password: </Label>
+          <Input
             type="password"
             name="password1"
             value={form.password1}
             onChange={changeHandler}
           />
-        </label>
-        <label>
-          confirm password:
-          <input
+
+          <Label>confirm password:</Label>
+          <Input
             type="password"
             name="password2"
             value={form.password2}
             onChange={changeHandler}
           />
-        </label>
-        <button type="submit">Register</button>
-      </form>
-      <div>{errorMessage}</div>
-      <div>
+
+          <Button type="submit">Register</Button>
+        </FormContainer>
+      </RegisterContainer>
+      <div style={{ textAlign: "center", margin: "0 auto 50px auto" }}>
         Have an account? <Link to="./">Login</Link>
       </div>
-    </div>
+    </>
   );
 }
 
