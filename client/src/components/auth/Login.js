@@ -1,7 +1,39 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
+const LoginContainer = styled.div`
+  margin: 10vh auto 30px auto;
+  width: 40%;
+  border: 5px solid black;
+  padding: 30px;
+`;
+const FormContainer = styled.form`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const Button = styled.div`
+  margin: 40px auto;
+
+  padding: 10px 20px;
+  border: 3px solid #202020;
+  font-size: 1.5rem;
+  cursor: pointer;
+  &:hover {
+    color: yellow;
+  }
+`;
+const Input = styled.input`
+  font-size: 1.5rem;
+  margin: 20px 10px;
+`;
+const Label = styled.label`
+  font-size: 1.5rem;
+  margin: 10px atuo 5px 10px;
+`;
 function Login(props) {
   const [form, setForm] = useState({
     username: "",
@@ -13,10 +45,10 @@ function Login(props) {
   const submitForm = e => {
     e.preventDefault();
     axios
-      .post(`https://cs-adv.herokuapp.com/api/login/`,form)
+      .post(`https://cs-adv.herokuapp.com/api/login/`, form)
       .then(res => {
         console.log(res.data);
-        localStorage.setItem("token", res.data.key)
+        localStorage.setItem("token", res.data.key);
         props.history.push("/game");
       })
       .catch(err => {
@@ -26,30 +58,33 @@ function Login(props) {
     setForm({ username: "", password: "" });
   };
   return (
-    <div className="Login">
-      <form onSubmit={submitForm}>
-        <label>
-          username:
-          <input
+    <>
+      <LoginContainer>
+        <FormContainer onSubmit={submitForm}>
+          <Label>username:</Label>
+          <Input
             type="text"
             name="username"
             value={form.username}
             onChange={changeHandler}
           />
-        </label>
-        <label>
-          password:
-          <input
+
+          <Label>password:</Label>
+
+          <Input
             type="password"
             name="password"
             value={form.password}
             onChange={changeHandler}
           />
-        </label>
-        <button type="submit">Login</button>
-      </form>
-      <div>need to <Link to="./register">register</Link>?</div>
-    </div>
+
+          <Button type="submit">Login</Button>
+        </FormContainer>
+      </LoginContainer>
+      <div style={{ textAlign: "center", margin: "0 auto 50px auto" }}>
+        need to <Link to="./register">register</Link>?
+      </div>
+    </>
   );
 }
 
