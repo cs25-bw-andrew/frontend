@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 
 
-function Register() {
+function Register(props) {
   const [errorMessage, setErrorMessage] = useState("");
   const [form, setForm] = useState({
     username: "",
@@ -22,11 +22,13 @@ function Register() {
       .then(res => {
         console.log(res.data);
         localStorage.setItem("token", res.data.key);
+        props.history.push("/game");
+        setForm({ username: "", password1: "", password2: "" });
       })
       .catch(err => {
         console.log(err.response.data);
       });
-    setForm({ username: "", password1: "", password2: "" });
+    
     setErrorMessage("");
   };
   return (
@@ -90,7 +92,7 @@ const Button = styled.button`
   font-size: 1.5rem;
   cursor: pointer;
   &:hover {
-    color: yellow;
+    color: #8b0000;
   }
 `;
 const Input = styled.input`
