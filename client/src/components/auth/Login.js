@@ -20,12 +20,13 @@ function Login(props) {
           console.log(res.data);
           localStorage.setItem("token", res.data.key);
           props.history.push("/game");
+          setForm({ username: "", password: "" });
         })
         .catch(err => {
           console.log(err.response.data);
         });
 
-      setForm({ username: "", password: "" });
+      
     };
   return (
     <>
@@ -82,7 +83,7 @@ const Button = styled.button`
   font-family: "Press Start 2P", cursive;
   cursor: pointer;
   &:hover {
-    color: yellow;
+    color: #8b0000;
   }
 `;
 const Input = styled.input`
