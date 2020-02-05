@@ -1,19 +1,41 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
-const MainContainer = styled.div`
-  position: relative;
 
-  width: 500px;
-  border: 5px solid #202020;
-  height: 500px;
-  background: #4a4a4a;
-`;
-
-function World() {
+function World({ mapList }) {
+  console.log("map ", mapList);
+  //console.log("player", player.position)
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
-  let items = [];
+  const [warning, setWarning] = useState("");
+  const [player, setPlayer] = useState({
+    title: "",
+    description: "",
+    players: []
+  });
+  //let items = [];
+  useEffect(() => {
+    axios
+      .get(`https://cs-adv.herokuapp.com/api/adv/init`, {
+        headers: {
+          authorization: `Token ${localStorage.getItem("token")}`
+        }
+      })
+      .then(res => {
+        console.log(res.data);
+        setTop(res.data.position[1]);
+        setLeft(res.data.position[0]);
+        setPlayer({
+          title: res.data.title,
+          description: res.data.description,
+          players: res.data.players
+        });
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
+  }, []);
   useEffect(() => {}, [top, left]);
   let playerStyles = {
     position: "absolute",
@@ -21,54 +43,145 @@ function World() {
     height: "20px",
     backgroundColor: `blue`,
     z_index: "99",
-    top: `${top * 23}px`,
+    top: `${480 - top * 23}px`,
     left: `${left * 23}px`
   };
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 15; j++) {
-      items.push([j, i]);
-    }
-  }
 
   const handleMove = movingDirection => {
-    if (movingDirection == "n") {
-      setTop(top - 1);
-    } else if (movingDirection == "s") {
-      setTop(top + 1);
-    } else if (movingDirection == "w") {
-      setLeft(left - 1);
-    } else if (movingDirection == "e") {
-      setLeft(left + 1);
-    }
+    axios
+      .post(
+        `https://cs-adv.herokuapp.com/api/adv/move`,
+        { direction: movingDirection },
+        {
+          headers: {
+            authorization: `Token ${localStorage.getItem("token")}`
+          }
+        }
+      )
+      .then(res => {
+        console.log(res.data);
+        setWarning(res.data.error_msg);
+        setPlayer({
+          title: res.data.title,
+          description: res.data.description,
+          players: res.data.players
+        });
+        if (movingDirection == "n" && !res.data.error_msg) {
+          setTop(top + 1);
+        } else if (movingDirection == "s" && !res.data.error_msg) {
+          setTop(top - 1);
+        } else if (movingDirection == "w" && !res.data.error_msg) {
+          setLeft(left - 1);
+        } else if (movingDirection == "e" && !res.data.error_msg) {
+          setLeft(left + 1);
+        }
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
   };
-
+  const printPlayerList = (players) => {
+    let playersStr=''
+    if (players) {
+      
+      players.map((player) => {
+        playersStr = `${playersStr} ${player}/ `
+    })
+    }
+    return playersStr
+}
   return (
     <div className="World">
-      <div>
-        <MainContainer>
-          {items.map(item => {
+      <MainContainer>
+        <GameContainer>
+          {mapList.map(item => {
             return (
               <div
                 style={{
                   position: "absolute",
                   width: "20px",
                   height: "20px",
-                  top: `${item[0] * 23}px`,
-                  left: `${item[1] * 23}px`,
+                  top: `${480 - item.y * 23}px`,
+                  left: `${item.x * 23}px`,
                   background: "red"
                 }}
               />
             );
           })}{" "}
           <div style={playerStyles} />
-        </MainContainer>
-        <button onClick={() => handleMove("n")}>N</button>
-        <button onClick={() => handleMove("s")}>S</button>
-        <button onClick={() => handleMove("w")}>W</button>
-        <button onClick={() => handleMove("e")}>E</button>
-      </div>
+        </GameContainer>
+        <ControlContainer>
+          <DisplayContainer>
+            <span>Room :{player.title}</span>
+            <p />
+            <span style={{ lineHeight: 1.6 }}>
+              Description :{player.description}
+            </span>
+            <p />
+            <span style={{ lineHeight: 1.6 }}>
+              Players: {printPlayerList(player.players)}
+            </span>
+          </DisplayContainer>
+          <ButtonContainer>
+            <div style={{ textAlign: "center" }}>
+              <Button onClick={() => handleMove("n")}>N</Button>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <Button onClick={() => handleMove("w")}>W</Button>
+              <Button onClick={() => handleMove("s")}>S</Button>
+              <Button onClick={() => handleMove("e")}>E</Button>
+              <p style={{ color: "#8b0000" }}>{warning}</p>
+            </div>
+          </ButtonContainer>
+        </ControlContainer>
+      </MainContainer>
     </div>
   );
 }
 
 export default World;
+
+
+const MainContainer = styled.div`
+  display: flex;
+`;
+
+const GameContainer = styled.div`
+  margin: 100px 5vw;
+  position: relative;
+
+  width: 500px;
+  border: 5px solid #202020;
+  height: 500px;
+  background: #4a4a4a;
+`;
+const ControlContainer = styled.div`
+  margin: 100px 5vw 100px 5vw;
+  width: 500px;
+  height: 500px;
+`;
+const DisplayContainer = styled.div`
+  padding: 10px;
+  font-size: 0.75rem;
+  background: black;
+  width: 500px;
+  height: 400px;
+  color: lightgrey;
+`;
+const ButtonContainer = styled.div`
+  width: 500px;
+  height: 100px;
+  margin: 20px auto;
+`;
+const Button = styled.button`
+  margin: 5px;
+  width: 50px;
+  padding: 5px;
+  border: 3px solid #202020;
+  font-size: 1.5rem;
+  font-family: "Press Start 2P", cursive;
+  cursor: pointer;
+  &:hover {
+    color: red;
+  }
+`;
