@@ -3,37 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const LoginContainer = styled.div`
-  margin: 10vh auto 30px auto;
-  width: 40%;
-  border: 5px solid black;
-  padding: 30px;
-`;
-const FormContainer = styled.form`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`;
 
-const Button = styled.div`
-  margin: 40px auto;
-
-  padding: 10px 20px;
-  border: 3px solid #202020;
-  font-size: 1.5rem;
-  cursor: pointer;
-  &:hover {
-    color: yellow;
-  }
-`;
-const Input = styled.input`
-  font-size: 1.5rem;
-  margin: 20px 10px;
-`;
-const Label = styled.label`
-  font-size: 1.5rem;
-  margin: 10px atuo 5px 10px;
-`;
 function Login(props) {
   const [form, setForm] = useState({
     username: "",
@@ -42,21 +12,21 @@ function Login(props) {
   const changeHandler = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const submitForm = e => {
-    e.preventDefault();
-    axios
-      .post(`https://cs-adv.herokuapp.com/api/login/`, form)
-      .then(res => {
-        console.log(res.data);
-        localStorage.setItem("token", res.data.key);
-        props.history.push("/game");
-      })
-      .catch(err => {
-        console.log(err.response.data);
-      });
+    const submitForm = e => {
+      e.preventDefault();
+      axios
+        .post(`https://cs-adv.herokuapp.com/api/login/`, form)
+        .then(res => {
+          console.log(res.data);
+          localStorage.setItem("token", res.data.key);
+          props.history.push("/game");
+        })
+        .catch(err => {
+          console.log(err.response.data);
+        });
 
-    setForm({ username: "", password: "" });
-  };
+      setForm({ username: "", password: "" });
+    };
   return (
     <>
       <LoginContainer>
@@ -89,3 +59,38 @@ function Login(props) {
 }
 
 export default Login;
+
+
+const LoginContainer = styled.div`
+  margin: 10vh auto 30px auto;
+  width: 40%;
+  border: 5px solid black;
+  padding: 30px;
+`;
+const FormContainer = styled.form`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const Button = styled.button`
+  margin: 40px auto;
+
+  padding: 10px 20px;
+  border: 3px solid #202020;
+  font-size: 1.5rem;
+  font-family: "Press Start 2P", cursive;
+  cursor: pointer;
+  &:hover {
+    color: yellow;
+  }
+`;
+const Input = styled.input`
+  font-size: 1.5rem;
+  margin: 20px 10px;
+  font-family: "Press Start 2P", cursive;
+`;
+const Label = styled.label`
+  font-size: 1.5rem;
+  margin: 10px atuo 5px 10px;
+`;
