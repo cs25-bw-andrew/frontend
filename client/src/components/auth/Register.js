@@ -3,37 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const RegisterContainer = styled.div`
-  margin: 10vh auto 30px auto;
-  width: 40%;
-  border: 5px solid black;
-  padding: 30px;
-`;
-const FormContainer = styled.form`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`;
 
-const Button = styled.div`
-  margin: 40px auto;
-
-  padding: 10px 20px;
-  border: 3px solid #202020;
-  font-size: 1.5rem;
-  cursor: pointer;
-  &:hover {
-    color: yellow;
-  }
-`;
-const Input = styled.input`
-  font-size: 1.5rem;
-  margin: 20px 10px;
-`;
-const Label = styled.label`
-  font-size: 1.5rem;
-  margin: 10px atuo 5px 10px;
-`;
 
 function Register() {
   const [errorMessage, setErrorMessage] = useState("");
@@ -98,3 +68,37 @@ function Register() {
 }
 
 export default Register;
+
+
+const RegisterContainer = styled.div`
+  margin: 10vh auto 30px auto;
+  width: 40%;
+  border: 5px solid black;
+  padding: 30px;
+`;
+const FormContainer = styled.form`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const Button = styled.button`
+  margin: 40px auto;
+  font-family: "Press Start 2P", cursive;
+  padding: 10px 20px;
+  border: 3px solid #202020;
+  font-size: 1.5rem;
+  cursor: pointer;
+  &:hover {
+    color: yellow;
+  }
+`;
+const Input = styled.input`
+  font-size: 1.5rem;
+  margin: 20px 10px;
+  font-family: "Press Start 2P", cursive;
+`;
+const Label = styled.label`
+  font-size: 1.5rem;
+  margin: 10px atuo 5px 10px;
+`;
