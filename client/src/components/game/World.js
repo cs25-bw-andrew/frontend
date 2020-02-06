@@ -199,7 +199,7 @@ function World( { mapList } ){
             <ChatContainer>
               <div
                 style={{
-                  height: "160px",
+                  height: "260px",
                   border: "2px solid yellow",
                   background: "black"
                 }}
@@ -243,22 +243,22 @@ const ControlContainer = styled.div`
 `;
 const DisplayContainer = styled.div`
   padding: 10px;
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   background: black;
   width: 500px;
-  height: 300px;
+  height: 200px;
   color: lightgrey;
 `;
 const ButtonContainer = styled.div`
   width: 250px;
   height: 100px;
-  margin: 80px 0 0 0;
+  margin: 180px 0 0 0;
   
 `;
 const ChatContainer = styled.div`
   width: 280px;
-  height: 200px;
-  
+  height: 300px;
+  font-size: 0.6rem;
   margin: 20px 0 0 0;
 `;
 const Button = styled.button`
