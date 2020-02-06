@@ -14,16 +14,16 @@ function Login( props ){
 
     e.preventDefault();
     axios
-      .post( `http://127.0.0.1:8000/api/login/`, form )
-      .then( res => {
-        console.log( res.data );
-        localStorage.setItem( "token", res.data.key );
-        props.history.push( "/game" );
-        setForm( { username: "", password: "" } );
-      } )
-      .catch( err => {
-        console.log( err );
-      } );
+      .post(`https://cs-adv.herokuapp.com/api/login/`, form)
+      .then(res => {
+        console.log(res.data);
+        localStorage.setItem("token", res.data.key);
+        props.history.push("/game");
+        setForm({ username: "", password: "" });
+      })
+      .catch(err => {
+        console.log(err);
+      });
     
   };
   return ( <>

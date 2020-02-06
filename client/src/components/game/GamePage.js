@@ -12,15 +12,15 @@ function GamePage(props) {
   };
   useEffect( () => {
     axios
-      .get( `http://127.0.0.1:8000/api/adv/rooms` )
-      .then( res => {
+      .get(`https://cs-adv.herokuapp.com/api/adv/rooms`)
+      .then(res => {
         //console.log(res.data);
 
-        setMapList( res.data );
-      } )
-      .catch( err => {
-        console.log( err.response.data );
-      } );
+        setMapList(res.data);
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
   }, [] );
   
   return ( <div className="GamePage">
