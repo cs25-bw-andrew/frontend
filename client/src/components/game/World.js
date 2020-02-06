@@ -81,28 +81,27 @@ function World( { mapList } ){
   //let items = [];
   useEffect( () => {
     axios
-      .get( `http://127.0.0.1:8000/api/adv/init`, {
+      .get(`https://cs-adv.herokuapp.com/api/adv/init`, {
         headers: {
-          authorization: `Token ${ localStorage.getItem( "token" ) }`
+          authorization: `Token ${localStorage.getItem("token")}`
         }
-      } )
-      .then( res => {
-        
-        if( uuid !== res.data.uuid ){
-          setUuid( res.data.uuid );
+      })
+      .then(res => {
+        if (uuid !== res.data.uuid) {
+          setUuid(res.data.uuid);
         }
-        console.log( res.data );
-        setTop( res.data.position[ 1 ] );
-        setLeft( res.data.position[ 0 ] );
-        setPlayer( {
+        console.log(res.data);
+        setTop(res.data.position[1]);
+        setLeft(res.data.position[0]);
+        setPlayer({
           title: res.data.title,
           description: res.data.description,
           players: res.data.players
-        } );
-      } )
-      .catch( err => {
-        console.log( err.response.data );
-      } );
+        });
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
   }, [] );
   
   useEffect( () => {
@@ -120,52 +119,57 @@ function World( { mapList } ){
   const handleMove = movingDirection => {
     
     axios
-      .post( `http://127.0.0.1:8000/api/adv/move`,
+      .post(
+        `https://cs-adv.herokuapp.com/api/adv/move`,
         { direction: movingDirection },
         {
           headers: {
-            authorization: `Token ${ localStorage.getItem( "token" ) }`
+            authorization: `Token ${localStorage.getItem("token")}`
           }
         }
       )
-      .then( res => {
-        console.log( res.data );
-        setWarning( res.data.error_msg );
-        setPlayer( {
+      .then(res => {
+        console.log(res.data);
+        setWarning(res.data.error_msg);
+        setPlayer({
           title: res.data.title,
           description: res.data.description,
           players: res.data.players
-        } );
-        if( movingDirection == "n" && !res.data.error_msg ){
-          setTop( top + 1 );
-        }else if( movingDirection == "s" && !res.data.error_msg ){
-          setTop( top - 1 );
-        }else if( movingDirection == "w" && !res.data.error_msg ){
-          setLeft( left - 1 );
-        }else if( movingDirection == "e" && !res.data.error_msg ){
-          setLeft( left + 1 );
+        });
+        if (movingDirection == "n" && !res.data.error_msg) {
+          setTop(top + 1);
+        } else if (movingDirection == "s" && !res.data.error_msg) {
+          setTop(top - 1);
+        } else if (movingDirection == "w" && !res.data.error_msg) {
+          setLeft(left - 1);
+        } else if (movingDirection == "e" && !res.data.error_msg) {
+          setLeft(left + 1);
         }
-      } )
-      .catch( err => {
-        console.log( err.response.data );
-      } );
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
   };
   
   const handleChat = ( e ) => {
     e.preventDefault();
     axios
-      .post( `http://127.0.0.1:8000/api/adv/say`, { message: form.chat }, {
-        headers: {
-          authorization: `Token ${ localStorage.getItem( "token" ) }`
+      .post(
+        `https://cs-adv.herokuapp.com/api/adv/say`,
+        { message: form.chat },
+        {
+          headers: {
+            authorization: `Token ${localStorage.getItem("token")}`
+          }
         }
-      } )
-      .then( res => {
-        console.log( res.data );
-        setForm( { chat: "" } );
-      } )
-      .catch( err => {
-        console.log( err.response.data );
-      } );
+      )
+      .then(res => {
+        console.log(res.data);
+        setForm({ chat: "" });
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
   };
   
   const printPlayerList = ( players ) => {

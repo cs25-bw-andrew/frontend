@@ -15,18 +15,17 @@ function Register( props ){
 
     e.preventDefault();
     axios
-      .post( `http://127.0.0.1:8000/api/registration/`, form )
-      .then( res => {
+      .post(`https://cs-adv.herokuapp.com/api/registration/`, form)
+      .then(res => {
+        console.log(res.data);
+        localStorage.setItem("token", res.data.key);
 
-        console.log( res.data );
-        localStorage.setItem( "token", res.data.key );
-        
-        props.history.push( "/game" );
-        setForm( { username: "", password1: "", password2: "" } );
-      } )
-      .catch( err => {
-        console.log( err );
-      } );
+        props.history.push("/game");
+        setForm({ username: "", password1: "", password2: "" });
+      })
+      .catch(err => {
+        console.log(err);
+      });
     
     setErrorMessage( "" );
   };

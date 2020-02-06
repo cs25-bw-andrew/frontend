@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import World from "./World";
 import styled from "styled-components";
 
-function GamePage(){
-  const [ mapList, setMapList ] = useState( [] );
+function GamePage(props) {
+  const [mapList, setMapList] = useState([]);
   //const [player,setPlayer] = useState([])
   const handleLogout = () => {
-    localStorage.removeItem( "token" );
+    localStorage.removeItem("token");
+    props.history.push("./")
   };
   useEffect( () => {
     axios
-      .get( `http://127.0.0.1:8000/api/adv/rooms` )
-      .then( res => {
+      .get(`https://cs-adv.herokuapp.com/api/adv/rooms`)
+      .then(res => {
         //console.log(res.data);
 
-        setMapList( res.data );
-      } )
-      .catch( err => {
-        console.log( err.response.data );
-      } );
+        setMapList(res.data);
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
   }, [] );
   
   return ( <div className="GamePage">
