@@ -15,6 +15,7 @@ function World( { mapList } ){
   const [ uuid, setUuid ] = useState( "" );
   const [ pusher, setPusher ] = useState( "" );
   const [ channel, setChannel ] = useState( "" );
+  const [ messages, setMessages ] = useState( ( [] ) );
   
   useEffect( () => {
     debugger;
@@ -37,7 +38,13 @@ function World( { mapList } ){
     if( channel !== "" ){
       channel.bind( "broadcast", ( data ) => {
         debugger;
-        console.log( data );
+        if( messages.length < 10 ){
+          messages.push( data.message );
+          setMessages( [ ...messages ] );
+        }else{
+          messages.splice( 0, 1 );
+          setMessages( [ ...messages, ...data.message ] );
+        }
       } );
     }
   }, [ channel ] );
@@ -153,6 +160,9 @@ function World( { mapList } ){
           <span style={ { lineHeight: 1.6 } }>
               Players: { printPlayerList( player.players ) }
             </span>
+          { messages.length > 0 && messages.map( message => {
+            return <p>{ message }</p>;
+          } ) }
         </DisplayContainer>
         <ButtonContainer>
           <div style={ { textAlign: "center" } }>
