@@ -3,64 +3,59 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-
-function Login(props) {
-  const [form, setForm] = useState({
-    username: "",
-    password: ""
-  });
+function Login( props ){
+  const [ form, setForm ] = useState( {
+    username: "", password: ""
+  } );
   const changeHandler = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm( { ...form, [ e.target.name ]: e.target.value } );
   };
-    const submitForm = e => {
-      e.preventDefault();
-      axios
-        .post(`https://cs-adv.herokuapp.com/api/login/`, form)
-        .then(res => {
-          console.log(res.data);
-          localStorage.setItem("token", res.data.key);
-          props.history.push("/game");
-          setForm({ username: "", password: "" });
-        })
-        .catch(err => {
-          console.log(err.response.data);
-        });
+  const submitForm = e => {
 
-      
-    };
-  return (
-    <>
-      <LoginContainer>
-        <FormContainer onSubmit={submitForm}>
-          <Label>username:</Label>
-          <Input
-            type="text"
-            name="username"
-            value={form.username}
-            onChange={changeHandler}
-          />
-
-          <Label>password:</Label>
-
-          <Input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={changeHandler}
-          />
-
-          <Button type="submit">Login</Button>
-        </FormContainer>
-      </LoginContainer>
-      <div style={{ textAlign: "center", margin: "0 auto 50px auto" }}>
-        need to <Link to="./register">register</Link>?
-      </div>
-    </>
-  );
+    e.preventDefault();
+    axios
+      .post( `http://127.0.0.1:8000/api/login/`, form )
+      .then( res => {
+        console.log( res.data );
+        localStorage.setItem( "token", res.data.key );
+        props.history.push( "/game" );
+        setForm( { username: "", password: "" } );
+      } )
+      .catch( err => {
+        console.log( err );
+      } );
+    
+  };
+  return ( <>
+    <LoginContainer>
+      <FormContainer onSubmit={ submitForm }>
+        <Label>username:</Label>
+        <Input
+          type="text"
+          name="username"
+          value={ form.username }
+          onChange={ changeHandler }
+        />
+        
+        <Label>password:</Label>
+        
+        <Input
+          type="password"
+          name="password"
+          value={ form.password }
+          onChange={ changeHandler }
+        />
+        
+        <Button type="submit">Login</Button>
+      </FormContainer>
+    </LoginContainer>
+    <div style={ { textAlign: "center", margin: "0 auto 50px auto" } }>
+      need to <Link to="./register">register</Link>?
+    </div>
+  </> );
 }
 
 export default Login;
-
 
 const LoginContainer = styled.div`
   margin: 10vh auto 30px auto;

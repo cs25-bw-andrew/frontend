@@ -10,27 +10,25 @@ function GamePage(props) {
     localStorage.removeItem("token");
     props.history.push("./")
   };
-  useEffect(() => {
+  useEffect( () => {
     axios
-      .get(`https://cs-adv.herokuapp.com/api/adv/rooms`)
-      .then(res => {
+      .get( `http://127.0.0.1:8000/api/adv/rooms` )
+      .then( res => {
         //console.log(res.data);
-        setMapList(res.data);
-      })
-      .catch(err => {
-        console.log(err.response.data);
-      });
-  }, []);
 
-  return (
-    <div className="GamePage">
-      {localStorage.getItem("token") ? (
-        <LogOut onClick={handleLogout}>Log out</LogOut>
-      ) : null}
-
-      <World mapList={mapList} />
-    </div>
-  );
+        setMapList( res.data );
+      } )
+      .catch( err => {
+        console.log( err.response.data );
+      } );
+  }, [] );
+  
+  return ( <div className="GamePage">
+      { localStorage.getItem( "token" ) ?
+        ( <LogOut onClick={ handleLogout }>Log out</LogOut> ) : null }
+      
+      <World mapList={ mapList }/>
+    </div> );
 }
 
 export default GamePage;

@@ -11,18 +11,16 @@ const AppContainer = styled.div`
 
 `;
 
-
-
-function App() {
-  return (
-    <div className="App">
-      <h1 style={{color:"yellow", margin:"20px 20px"}}>Adventure Game </h1>
-
-      <Route exact path="/" component={Login} />
-      <Route exact path="/register" component={Register} />
-      <Route exact path="/game" component={GamePage} />
-    </div>
-  );
+function App(){
+  return ( <div className="App">
+    <h1 style={ { color: "yellow", margin: "20px 20px" } }>Adventure
+      Game </h1>
+    
+    <Route exact path="/" component={ Login }/>
+    <Route exact path="/register" component={ Register }
+    />
+    <Route exact path="/game" component={ GamePage }/>
+  </div> );
 }
 
 export default App;
