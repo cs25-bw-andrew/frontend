@@ -29,15 +29,18 @@ function World( { mapList } ){
   
   useEffect( () => {
     if( pusher !== "" ){
-      setChannel( pusher.bind( "p-channel-" + uuid ) );
+      setChannel( pusher.subscribe( "p-channel-" + uuid ) );
     }
   }, [ pusher ] );
   
   useEffect( () => {
     if( channel !== "" ){
-      debugger;
+      channel.bind( "broadcast", ( data ) => {
+        debugger;
+        console.log( data );
+      } );
     }
-  } );
+  }, [ channel ] );
   
   //let items = [];
   useEffect( () => {
