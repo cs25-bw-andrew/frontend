@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import World from "./World";
 import styled from "styled-components";
 
-function GamePage() {
+function GamePage(props) {
   const [mapList, setMapList] = useState([]);
   //const [player,setPlayer] = useState([])
   const handleLogout = () => {
     localStorage.removeItem("token");
+    props.history.push("./")
   };
   useEffect(() => {
     axios
