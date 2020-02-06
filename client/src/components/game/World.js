@@ -4,7 +4,7 @@ import axios from "axios";
 import Pusher from "pusher-js";
 
 function World( { mapList } ){
-  console.log( "map ", mapList );
+  //console.log( "map ", mapList );
   //console.log("player", player.position)
   const [ top, setTop ] = useState( 0 );
   const [ left, setLeft ] = useState( 0 );
@@ -15,9 +15,14 @@ function World( { mapList } ){
   const [ uuid, setUuid ] = useState( "" );
   const [ pusher, setPusher ] = useState( "" );
   const [ channel, setChannel ] = useState( "" );
-  
+  const [form, setForm] = useState({
+    chat:""
+  });
+  const changeHandler = e => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
   useEffect( () => {
-    debugger;
+
     if( uuid !== "" ){
       setPusher( new Pusher( "f7cd454f2fd72664163b", {
         cluster: "us3"
@@ -36,7 +41,7 @@ function World( { mapList } ){
   useEffect( () => {
     if( channel !== "" ){
       channel.bind( "broadcast", ( data ) => {
-        debugger;
+
         console.log( data );
       } );
     }
@@ -51,7 +56,7 @@ function World( { mapList } ){
         }
       } )
       .then( res => {
-        debugger;
+
         if( uuid !== res.data.uuid ){
           setUuid( res.data.uuid );
         }
@@ -82,7 +87,7 @@ function World( { mapList } ){
   };
   
   const handleMove = movingDirection => {
-    debugger;
+    
     axios
       .post( `http://127.0.0.1:8000/api/adv/move`,
         { direction: movingDirection },
@@ -115,6 +120,27 @@ function World( { mapList } ){
       } );
   };
   
+  const handleChat = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        `http://127.0.0.1:8000/api/adv/say`,
+        { message: form.chat },
+        {
+          headers: {
+            authorization: `Token ${localStorage.getItem("token")}`
+          }
+        }
+      )
+      .then(res => {
+        console.log(res.data);
+        setForm({chat:""})
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
+  }
+
   const printPlayerList = ( players ) => {
     let playersStr = "";
     if( players ){
@@ -125,49 +151,74 @@ function World( { mapList } ){
     }
     return playersStr;
   };
-  return ( <div className="World">
-    <MainContainer>
-      <GameContainer>
-        { mapList.map( item => {
-          return ( <div
-            style={ {
-              position: "absolute",
-              width: "20px",
-              height: "20px",
-              top: `${ 480 - item.y * 23 }px`,
-              left: `${ item.x * 23 }px`,
-              background: "red"
-            } }
-          /> );
-        } ) }{ " " }
-        <div style={ playerStyles }/>
-      </GameContainer>
-      <ControlContainer>
-        <DisplayContainer>
-          <span>Room :{ player.title }</span>
-          <p/>
-          <span style={ { lineHeight: 1.6 } }>
-              Description :{ player.description }
+  return (
+    <div className="World">
+      <MainContainer>
+        <GameContainer>
+          {mapList.map(item => {
+            return (
+              <div
+                style={{
+                  position: "absolute",
+                  width: "20px",
+                  height: "20px",
+                  top: `${480 - item.y * 23}px`,
+                  left: `${item.x * 23}px`,
+                  background: "red"
+                }}
+              />
+            );
+          })}{" "}
+          <div style={playerStyles} />
+        </GameContainer>
+        <ControlContainer>
+          <DisplayContainer>
+            <span>Room :{player.title}</span>
+            <p />
+            <span style={{ lineHeight: 1.6 }}>
+              Description :{player.description}
             </span>
-          <p/>
-          <span style={ { lineHeight: 1.6 } }>
-              Players: { printPlayerList( player.players ) }
+            <p />
+            <span style={{ lineHeight: 1.6 }}>
+              Players: {printPlayerList(player.players)}
             </span>
-        </DisplayContainer>
-        <ButtonContainer>
-          <div style={ { textAlign: "center" } }>
-            <Button onClick={ () => handleMove( "n" ) }>N</Button>
+          </DisplayContainer>
+          <div style={{ display: "flex" }}>
+            <ButtonContainer>
+              <div style={{ textAlign: "center" }}>
+                <Button onClick={() => handleMove("n")}>N</Button>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <Button onClick={() => handleMove("w")}>W</Button>
+                <Button onClick={() => handleMove("s")}>S</Button>
+                <Button onClick={() => handleMove("e")}>E</Button>
+
+                <p style={{ color: "#8b0000" }}>{warning}</p>
+              </div>
+            </ButtonContainer>
+            <ChatContainer>
+              <div
+                style={{
+                  height: "160px",
+                  border: "2px solid yellow",
+                  background: "black"
+                }}
+              ></div>
+              <div style={{}}>
+                <Input
+                  type="text"
+                  name="chat"
+                  value={form.chat}
+                  onChange={changeHandler}
+                />
+                <button onClick={handleChat}>send</button>
+              </div>
+            </ChatContainer>
           </div>
-          <div style={ { textAlign: "center" } }>
-            <Button onClick={ () => handleMove( "w" ) }>W</Button>
-            <Button onClick={ () => handleMove( "s" ) }>S</Button>
-            <Button onClick={ () => handleMove( "e" ) }>E</Button>
-            <p style={ { color: "#8b0000" } }>{ warning }</p>
-          </div>
-        </ButtonContainer>
-      </ControlContainer>
-    </MainContainer>
-  </div> );
+        </ControlContainer>
+      </MainContainer>
+    </div>
+  );
 }
 
 export default World;
@@ -195,13 +246,20 @@ const DisplayContainer = styled.div`
   font-size: 0.75rem;
   background: black;
   width: 500px;
-  height: 400px;
+  height: 300px;
   color: lightgrey;
 `;
 const ButtonContainer = styled.div`
-  width: 500px;
+  width: 250px;
   height: 100px;
-  margin: 20px auto;
+  margin: 80px 0 0 0;
+  
+`;
+const ChatContainer = styled.div`
+  width: 280px;
+  height: 200px;
+  
+  margin: 20px 0 0 0;
 `;
 const Button = styled.button`
   margin: 5px;
@@ -214,4 +272,9 @@ const Button = styled.button`
   &:hover {
     color: red;
   }
+`;
+
+const Input = styled.input`
+  margin: 5px 5px 5px 0;
+  width: 210px;
 `;

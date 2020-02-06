@@ -15,7 +15,7 @@ function GamePage(){
       .get( `http://127.0.0.1:8000/api/adv/rooms` )
       .then( res => {
         //console.log(res.data);
-        debugger;
+
         setMapList( res.data );
       } )
       .catch( err => {

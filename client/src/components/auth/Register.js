@@ -12,12 +12,12 @@ function Register( props ){
     setForm( { ...form, [ e.target.name ]: e.target.value } );
   };
   const submitForm = e => {
-    debugger;
+
     e.preventDefault();
     axios
       .post( `http://127.0.0.1:8000/api/registration/`, form )
       .then( res => {
-        debugger;
+
         console.log( res.data );
         localStorage.setItem( "token", res.data.key );
         
