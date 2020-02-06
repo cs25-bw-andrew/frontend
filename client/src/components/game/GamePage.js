@@ -4,33 +4,31 @@ import { Link } from "react-router-dom";
 import World from "./World";
 import styled from "styled-components";
 
-function GamePage() {
-  const [mapList, setMapList] = useState([]);
+function GamePage(){
+  const [ mapList, setMapList ] = useState( [] );
   //const [player,setPlayer] = useState([])
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem( "token" );
   };
-  useEffect(() => {
+  useEffect( () => {
     axios
-      .get(`https://cs-adv.herokuapp.com/api/adv/rooms`)
-      .then(res => {
+      .get( `http://127.0.0.1:8000/api/adv/rooms` )
+      .then( res => {
         //console.log(res.data);
-        setMapList(res.data);
-      })
-      .catch(err => {
-        console.log(err.response.data);
-      });
-  }, []);
-
-  return (
-    <div className="GamePage">
-      {localStorage.getItem("token") ? (
-        <LogOut onClick={handleLogout}>Log out</LogOut>
-      ) : null}
-
-      <World mapList={mapList} />
-    </div>
-  );
+        debugger;
+        setMapList( res.data );
+      } )
+      .catch( err => {
+        console.log( err.response.data );
+      } );
+  }, [] );
+  
+  return ( <div className="GamePage">
+      { localStorage.getItem( "token" ) ?
+        ( <LogOut onClick={ handleLogout }>Log out</LogOut> ) : null }
+      
+      <World mapList={ mapList }/>
+    </div> );
 }
 
 export default GamePage;
